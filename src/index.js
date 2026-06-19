@@ -1,20 +1,8 @@
 const express = require('express');
 const app = express();
 
-let db = [
-    {
-        username: 'admin',
-        password: '123456',
-        role: "admin",
-        token : "123"
-    },
-    {
-        username: 'user',
-        password: '123456',
-        role: "user",
-        token : "1234"
-    }
-]
+const db = require("./db");
+const authRouter = require('./routes/authRoutes');
 
 function adminMiddlwware(req,res,next){
     const token = req.headers.token;
@@ -35,6 +23,9 @@ function userMiddlwware(req,res,next){
     req.user = user
     next();
 }
+//localhost:3000/auth/signup
+app.use("/auth", authRouter);
+
 
 app.post('/adminRoute', adminMiddlwware,(req, res) => {
     const userRole = req.user.role;
